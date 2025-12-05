@@ -1,0 +1,6 @@
+<RCC>
+  <qresource prefix="img">
+    <file>logosimbolo-vertical-negro-png.png</file>
+    <file>white-texture-background.jpg</file>
+  </qresource>
+</RCC>

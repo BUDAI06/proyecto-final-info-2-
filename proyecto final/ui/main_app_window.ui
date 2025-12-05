@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>386</width>
+    <height>400</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Projecto Final</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">#centralwidget {
+    background-image: url(:/img/white-texture-background.jpg) 0 0 0 0 stretch stretch;
+}</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <property name="autoFillBackground">
+    <bool>true</bool>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">#centralwidget {
+    border-image: url(:/img/white-texture-background.jpg) 0 0 0 0 stretch stretch;
+}</string>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout_3">
+    <item>
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <item>
+       <layout class="QHBoxLayout" name="logo">
+        <item>
+         <widget class="QLabel" name="logo_udea">
+          <property name="maximumSize">
+           <size>
+            <width>40</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="pixmap">
+           <pixmap resource="../resources/resources1.qrc">:/img/logosimbolo-vertical-negro-png.png</pixmap>
+          </property>
+          <property name="scaledContents">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btn_ir_imagenes">
+        <property name="text">
+         <string>Imágenes Médicas</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btn_ir_senales">
+        <property name="text">
+         <string>Señales EEG/ECG</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btn_ir_tabular">
+        <property name="text">
+         <string>Datos CSV</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" name="verticalLayout_3">
+        <item>
+         <spacer name="verticalSpacer">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btn_ir_perfil">
+        <property name="text">
+         <string>Perfil</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btn_ir_logout">
+        <property name="text">
+         <string>Cerrar sesión</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QVBoxLayout" name="columna_der_dinamica">
+      <item>
+       <widget class="QStackedWidget" name="stacked_contenido">
+        <property name="currentIndex">
+         <number>0</number>
+        </property>
+        <widget class="QWidget" name="page_home">
+         <property name="minimumSize">
+          <size>
+           <width>294</width>
+           <height>0</height>
+          </size>
+         </property>
+        </widget>
+        <widget class="QWidget" name="page_imagenes"/>
+        <widget class="QWidget" name="page_senales"/>
+        <widget class="QWidget" name="tabular"/>
+        <widget class="QWidget" name="perfil"/>
+        <widget class="QWidget" name="page_6"/>
+       </widget>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>386</width>
+     <height>18</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <tabstops>
+  <tabstop>btn_ir_imagenes</tabstop>
+  <tabstop>btn_ir_senales</tabstop>
+  <tabstop>btn_ir_tabular</tabstop>
+  <tabstop>btn_ir_perfil</tabstop>
+  <tabstop>btn_ir_logout</tabstop>
+ </tabstops>
+ <resources>
+  <include location="../resources/resources1.qrc"/>
+ </resources>
+ <connections/>
+</ui>
