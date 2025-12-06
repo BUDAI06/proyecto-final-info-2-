@@ -1,22 +1,24 @@
 import sys
+import os
 from PyQt5.QtWidgets import QApplication
+
+current_dir = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(current_dir)
+
 from controller.main_controller import MainController
 from view.main_view import MainAppView
 
-if __name__ == '__main__':
-
+def main():
     app = QApplication(sys.argv)
 
-    # Crear la vista principal
-    vista = MainAppView()
-
-    # Crear el controlador principal usando la vista
-    controller = MainController(vista)
-
-    # Mostrar la vista principal
-    vista.show()
-
-    # Iniciar mostrando login/perfil
-    controller.ctrl_perfil.mostrar()
     
+    vista_principal = MainAppView()
+
+    controlador = MainController(vista_principal)
+
+    vista_principal.show()
+
     sys.exit(app.exec_())
+
+if __name__ == "__main__":
+    main()
