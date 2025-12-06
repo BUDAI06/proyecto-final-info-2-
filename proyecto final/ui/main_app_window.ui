@@ -123,7 +123,7 @@
          <bool>true</bool>
         </property>
         <property name="currentIndex">
-         <number>1</number>
+         <number>5</number>
         </property>
         <widget class="QWidget" name="page_home">
          <property name="minimumSize">
@@ -233,7 +233,7 @@
             <item>
              <layout class="QVBoxLayout" name="verticalLayout_2">
               <item>
-               <widget class="QLabel" name="label">
+               <widget class="QLabel" name="lbl_metadatos">
                 <property name="maximumSize">
                  <size>
                   <width>300</width>
