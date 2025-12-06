@@ -1,14 +1,14 @@
 # Controlador.py
 
 # Importar las clases de los otros archivos
-from vista import LoginView, MainAppView
-from modelo import AutenticadorModelo
+from view import LoginView, MainAppView
+from model import AutenticadorModelo
 from PyQt5.QtWidgets import QApplication
 from PyQt5 import QtWidgets
 
 # Controlador.py (Modificar la clase MainAppController)
 # Añadir la importación
-from modelo import AutenticadorModelo, ProcesadorOpenCVModelo, ProcesadorImagenesMedicasModelo 
+from model import AutenticadorModelo, ProcesadorOpenCVModelo, ProcesadorImagenesMedicasModelo 
 # También necesitarás importar QtWidgets y QFileDialog de PyQt
 
 class MainAppController:

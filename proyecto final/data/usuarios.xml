@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<usuarios>
+    <usuario>
+        <username>admin</username>
+        <password>1234</password>
+        <nombre>Administrador General</nombre>
+        <rol>admin</rol>
+    </usuario>
+
+    <usuario>
+        <username>angel</username>
+        <password>be_engineer</password>
+        <nombre>Angel</nombre>
+        <rol>estudiante</rol>
+    </usuario>
+</usuarios>

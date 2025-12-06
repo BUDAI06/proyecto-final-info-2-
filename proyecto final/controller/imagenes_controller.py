@@ -1,7 +1,7 @@
 # controlador/imagenes_controller.py
-from PyQt5.QtWidgets import QFileDialog
+from PyQt5.QtWidgets import QFileDialog, QMessageBox
 from model.procesamiento_imagenes_model import ProcesadorImagenesMedicasModelo
-
+import os
 class ImagenesController:
     def __init__(self, vista):
         self.vista = vista
@@ -13,13 +13,35 @@ class ImagenesController:
         self.vista.sld_coronal.valueChanged.connect(self.actualizar_cortes)
         self.vista.sld_sagital.valueChanged.connect(self.actualizar_cortes)
 
+    
     def cargar_archivo(self):
-        ruta, _ = QFileDialog.getOpenFileName(
-            None,
-            "Cargar imagen médica",
-            "",
-            "DICOM (*.dcm);;NIFTI (*.nii *.nii.gz);;PNG (*.png);;JPG (*.jpg)"
-        )
+        
+        msg = QMessageBox()
+        msg.setIcon(QMessageBox.Question)
+        msg.setText("¿Qué tipo de recurso deseas cargar?")
+        msg.setWindowTitle("Selección de recurso")
+        
+        btn_archivo = msg.addButton("Archivo Individual", QMessageBox.YesRole)
+        btn_carpeta = msg.addButton("Carpeta (Serie DICOM)", QMessageBox.NoRole)
+        msg.exec_()
+
+        ruta = None
+
+        if msg.clickedButton() == btn_archivo:
+            # Opción A: Cargar archivo individual
+            ruta, _ = QFileDialog.getOpenFileName(
+                None,
+                "Cargar archivo de imagen",
+                "",
+                "DICOM (*.dcm);;NIFTI (*.nii *.nii.gz);;Todos (*.*)"
+            )
+        elif msg.clickedButton() == btn_carpeta:
+            # Opción B: Cargar carpeta (Serie DICOM)
+            ruta = QFileDialog.getExistingDirectory(
+                None,
+                "Seleccionar Carpeta con Serie DICOM",
+                os.path.expanduser("~")
+            )
 
         if not ruta:
             return
