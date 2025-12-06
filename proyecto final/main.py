@@ -18,7 +18,9 @@ def main():
 
     vista_principal.show()
 
+    controlador.mostrar_login_inicial()
     sys.exit(app.exec_())
+
 
 if __name__ == "__main__":
     main()

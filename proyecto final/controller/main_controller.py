@@ -34,15 +34,13 @@ class MainController:
         # Usuario
         self.usuario = None
         
-        # Iniciar controlador de perfil
-        self.ctrl_perfil = PerfilController(self.vista, self.vista.stacked)
+        self.ctrl_perfil = PerfilController(self.vista, self.vista.stacked, self)
 
         if hasattr(self.vista, 'btn_ir_perfil'):
             self.vista.btn_ir_perfil.clicked.connect(self.ctrl_perfil.mostrar)
-        if hasattr(self.vista, 'btn_logout'): # A veces se llama btn_ir_logout
+        if hasattr(self.vista, 'btn_logout'):
             self.vista.btn_logout.clicked.connect(self.logout)
         
-
     def mostrar_principal(self, usuario):
         self.usuario = usuario
         # Log en base de datos
@@ -52,11 +50,33 @@ class MainController:
         self.actualizar_estado_botones()
         self.vista.show()
 
+    def mostrar_login_inicial(self):
+        self.deshabilitar_menu()
+        self.ctrl_perfil.mostrar_login_forzado()
+        self.vista.show()
+
+    def set_usuario_logueado(self, datos_usuario):
+        self.usuario = datos_usuario
+        self.habilitar_menu()
+
     def logout(self):
         self.usuario = None
-        self.actualizar_estado_botones()
-        self.ctrl_perfil.mostrar() 
+        self.deshabilitar_menu()
+        self.ctrl_perfil.mostrar_login_forzado()
+
+    def deshabilitar_menu(self):
+        self.vista.btn_ir_imagenes.setEnabled(False)
+        self.vista.btn_ir_senales.setEnabled(False)
+        self.vista.btn_ir_tabular.setEnabled(False)
+        self.vista.btn_ir_logout.hide()
+        self.vista.btn_ir_perfil.setText("Iniciar sesión")
+
+    def habilitar_menu(self):
+        self.vista.btn_ir_imagenes.setEnabled(True)
+        self.vista.btn_ir_senales.setEnabled(True)
+        self.vista.btn_ir_tabular.setEnabled(True)
+        self.vista.btn_ir_logout.show()
+        self.vista.btn_ir_perfil.setText("Perfil")
 
     def actualizar_estado_botones(self):
-        # Lógica visual opcional
         pass

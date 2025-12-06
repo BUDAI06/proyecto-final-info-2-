@@ -2,10 +2,11 @@ from PyQt5.QtWidgets import QPushButton, QWidget
 from model.autenticacion_model import AutenticacionModel
 
 class PerfilController:
-    def __init__(self, main_view, stacked_widget):
+    def __init__(self, main_view, stacked_widget, controlador_principal):
 
         self.main_view = main_view
         self.stacked = stacked_widget
+        self.ctrl_main = controlador_principal
         self.modelo = AutenticacionModel()
         self.usuario_actual = None
 
@@ -26,7 +27,9 @@ class PerfilController:
         self.btn_logout.clicked.connect(self.logout)
         self.btn_menu_perfil.clicked.connect(self.mostrar)
         
-
+    def mostrar_login_forzado(self):
+        self.usuario_actual = None
+        self.stacked.setCurrentWidget(self.page_login)
 
     def mostrar(self):
         if self.usuario_actual is None:
@@ -46,11 +49,13 @@ class PerfilController:
             return
         
         self.usuario_actual = datos
-        self.lbl_login_msg.setText("")
         self.btn_menu_perfil.setText("Perfil")
+        self.lbl_login_msg.setText("")
 
         self.actualizar_perfil()
         self.stacked.setCurrentWidget(self.page_perfil)
+
+        self.ctrl_main.set_usuario_logueado(datos)
 
     def actualizar_perfil(self):
         if self.usuario_actual:
@@ -63,13 +68,9 @@ class PerfilController:
 
     def logout(self):
         self.usuario_actual = None
-
         self.txt_user.setText("")
         self.txt_pass.setText("")
         self.lbl_login_msg.setText("")
         self.lbl_perfil.setText("")
-
         self.btn_menu_perfil.setText("Iniciar sesión")
         self.stacked.setCurrentWidget(self.page_login)
-        
-    
