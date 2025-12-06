@@ -141,7 +141,7 @@ class TabularController:
                 return
 
         try:
-            print(f"🎨 Intentando dibujar histograma de: {col}")
+            print(f"Dibujando histograma de: {col}")
             self.figure.clear()
             ax = self.figure.add_subplot(111)
             
@@ -153,11 +153,11 @@ class TabularController:
             ax.grid(True, linestyle='--', alpha=0.5)
             
             self.canvas.draw()
-            print("✅ ¡DIBUJO COMPLETADO EN MEMORIA!")
+            print("¡DIBUJO COMPLETADO EN MEMORIA!")
 
             # 4. VERIFICACIÓN VISUAL
             if not self.canvas_incrustado or self.canvas.width() < 10:
-                print("⚠️ Canvas oculto. Abriendo ventana flotante de emergencia.")
+                print("Canvas oculto. Abriendo ventana flotante de emergencia.")
                 self.abrir_ventana_flotante()
             else:
                 print("Gráfica actualizada en interfaz principal.")
