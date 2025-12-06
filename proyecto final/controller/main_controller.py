@@ -1,4 +1,4 @@
-
+from model.base_datos_model import BaseDatosModel
 from view.main_view import MainAppView
 
 from controller.imagenes_controller import ImagenesController
@@ -8,7 +8,7 @@ from controller.perfil_controller import PerfilController
 
 class MainController:
     def __init__(self,vista):
-    
+        self.db = BaseDatosModel()
         self.vista = vista
         self.stacked = self.vista.stacked
         # --- SEÑALES ---
@@ -43,6 +43,7 @@ class MainController:
 
     def mostrar_principal(self, usuario):
         self.usuario = usuario
+        self.db.registrar_log(usuario['username'], "LOGIN", "Inicio de sesión exitoso")
         self.vista.mostrar_home()
         self.actualizar_estado_botones() # Actualizamos la UI al entrar
         self.vista.show()
