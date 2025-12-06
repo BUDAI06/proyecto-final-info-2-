@@ -143,7 +143,7 @@ class TabularController:
                 self.figure.tight_layout()
                 self.canvas.draw()
                 
-                self.txt_stats.append(f"\n📈 Gráfica generada para: {col}")
+                self.txt_stats.append(f"\nGráfica generada para: {col}")
 
                 # Ventana flotante de emergencia si no se pudo incrustar
                 if not self.canvas_incrustado:
