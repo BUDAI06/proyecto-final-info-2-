@@ -1,5 +1,4 @@
 from PyQt5.QtWidgets import QWidget, QPushButton, QLabel, QSlider
-# from PyQt5.uic import loadUi  <-- Ya no lo necesitas aquí
 from PyQt5.QtCore import Qt
 import numpy as np
 from PyQt5.QtGui import QImage, QPixmap
@@ -7,12 +6,9 @@ import os
 
 class ImagenesView:
     def __init__(self, main_window):
-        # Ya no necesitamos super().__init__() porque no heredamos de QWidget
         self.ui = main_window
 
         # --- REFERENCIAS A LA UI ---
-        # BUSCAMOS LOS WIDGETS DENTRO DE LA VENTANA PRINCIPAL (self.ui)
-        
         self.btn_cargar_imagen = self.ui.findChild(QPushButton, "btn_cargar_imagen")
 
         self.lbl_axial = self.ui.findChild(QLabel, "lbl_axial")
@@ -31,7 +27,7 @@ class ImagenesView:
         if self.sld_axial:
             self.sld_axial.setOrientation(Qt.Horizontal)
         else:
-            print("⚠️ CUIDADO: No se encontró 'sld_axial'. Revisa el objectName en Designer.")
+            print("CUIDADO: No se encontró 'sld_axial'. Revisa el objectName en Designer.")
 
         if self.sld_coronal:
             self.sld_coronal.setOrientation(Qt.Horizontal)
@@ -52,14 +48,16 @@ class ImagenesView:
     def mostrar_slice(self, data: np.ndarray, label: QLabel):
         """Convierte un array HU a imagen y lo pone en un QLabel."""
         if label is None:
-            return # Evitamos error si el label no se encontró
+            return print("label de metadatos no encontrada") # Evitamos error si el label no se encontró
 
-        min_hu, max_hu = -1000, 400
+        min_val = np.min(data)
+        max_val = np.max(data)
 
-        clip = np.clip(data, min_hu, max_hu)
-        # Evitamos división por cero si min_hu y max_hu fueran iguales
-        if max_hu != min_hu:
-            norm = ((clip - min_hu) / (max_hu - min_hu)) * 255
+        clip = data
+        
+        # Evitamos división por cero si min_val y max_val fueran iguales
+        if max_val != min_val:
+            norm = ((clip - min_val) / (max_val - min_val)) * 255
         else:
             norm = clip
 
