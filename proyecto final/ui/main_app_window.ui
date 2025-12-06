@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>606</width>
-    <height>545</height>
+    <width>820</width>
+    <height>656</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -123,7 +123,7 @@
          <bool>true</bool>
         </property>
         <property name="currentIndex">
-         <number>5</number>
+         <number>3</number>
         </property>
         <widget class="QWidget" name="page_home">
          <property name="minimumSize">
@@ -233,7 +233,7 @@
             <item>
              <layout class="QVBoxLayout" name="verticalLayout_2">
               <item>
-               <widget class="QLabel" name="lbl_metadatos">
+               <widget class="QLabel" name="label">
                 <property name="maximumSize">
                  <size>
                   <width>300</width>
@@ -381,6 +381,19 @@
          <layout class="QHBoxLayout" name="horizontalLayout_2">
           <item>
            <layout class="QGridLayout" name="gridLayout_2">
+            <item row="0" column="1">
+             <spacer name="horizontalSpacer_3">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>0</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
             <item row="1" column="0" rowspan="5">
              <spacer name="verticalSpacer_2">
               <property name="orientation">
@@ -393,6 +406,13 @@
                </size>
               </property>
              </spacer>
+            </item>
+            <item row="0" column="0">
+             <widget class="QPushButton" name="btn_cargar_csv">
+              <property name="text">
+               <string>Cargar archivo CSV</string>
+              </property>
+             </widget>
             </item>
             <item row="4" column="1">
              <widget class="QLabel" name="lbl_grafica">
@@ -407,10 +427,19 @@
               </property>
              </widget>
             </item>
-            <item row="0" column="0">
-             <widget class="QPushButton" name="btn_cargar_csv">
-              <property name="text">
-               <string>Cargar archivo CSV</string>
+            <item row="1" column="1" rowspan="2">
+             <widget class="QTableWidget" name="table_datos">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>100</width>
+                <height>50</height>
+               </size>
               </property>
              </widget>
             </item>
@@ -430,39 +459,7 @@
                 </property>
                </widget>
               </item>
-              <item>
-               <widget class="QComboBox" name="cb_columnas"/>
-              </item>
              </layout>
-            </item>
-            <item row="0" column="1">
-             <spacer name="horizontalSpacer_3">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>40</width>
-                <height>0</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item row="1" column="1" rowspan="2">
-             <widget class="QTableWidget" name="tabla_datos">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>100</width>
-                <height>50</height>
-               </size>
-              </property>
-             </widget>
             </item>
             <item row="5" column="1">
              <widget class="QLabel" name="lbl_info_tabular">
@@ -669,8 +666,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>606</width>
-     <height>18</height>
+     <width>820</width>
+     <height>43</height>
     </rect>
    </property>
   </widget>
