@@ -1,26 +1,34 @@
-from PyQt5.QtWidgets import QWidget, QPushButton, QLineEdit, QLabel, QVBoxLayout
+from PyQt5.QtWidgets import QWidget, QMessageBox, QLineEdit, QPushButton
+from PyQt5.uic import loadUi
+import os
 
 class LoginView(QWidget):
     def __init__(self):
         super().__init__()
 
-        layout = QVBoxLayout()
+        ruta_actual = os.path.dirname(os.path.abspath(__file__))
+        ruta_ui = os.path.join(ruta_actual, "..", "ui", "login_window.ui")
 
-        self.lbl_title = QLabel("Iniciar sesión")
-        self.txt_usuario = QLineEdit()
-        self.txt_usuario.setPlaceholderText("Usuario")
-        self.txt_password = QLineEdit()
-        self.txt_password.setPlaceholderText("Contraseña")
-        self.txt_password.setEchoMode(QLineEdit.Password)
+        try:
+            loadUi(ruta_ui, self)
+        except FileNotFoundError:
+            self.mostrar_mensaje("Error Crítico", f"No se encuentra el archivo: {ruta_ui}")
 
-        self.btn_login = QPushButton("Ingresar")
+        self.btn_login = self.findChild(QPushButton, "btn_login")
+        self.txt_usuario = self.findChild(QLineEdit, "txt_usuario")
+        self.txt_password = self.findChild(QLineEdit, "txt_password")
 
-        layout.addWidget(self.lbl_title)
-        layout.addWidget(self.txt_usuario)
-        layout.addWidget(self.txt_password)
-        layout.addWidget(self.btn_login)
-
-        self.setLayout(layout)
+        if self.txt_password:
+            self.txt_password.setEchoMode(QLineEdit.Password)
 
     def obtener_credenciales(self):
-        return self.txt_usuario.text(), self.txt_password.text()
+        if self.txt_usuario and self.txt_password:
+            return self.txt_usuario.text(), self.txt_password.text()
+        return "", ""
+
+    def mostrar_mensaje(self, titulo, mensaje):
+        msg = QMessageBox()
+        msg.setWindowTitle(titulo)
+        msg.setText(mensaje)
+        msg.setIcon(QMessageBox.Warning)
+        msg.exec_()
