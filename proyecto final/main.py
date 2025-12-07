@@ -1,7 +1,7 @@
 import sys
 import os
 from PyQt5.QtWidgets import QApplication
-
+import resources.resources1_rc
 current_dir = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(current_dir)
 
