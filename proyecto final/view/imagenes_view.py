@@ -7,7 +7,7 @@ class ImagenesView:
     def __init__(self, main_window):
         self.ui = main_window
 
-        # --- 1. VARIABLES INYECTADAS (Se llenan desde main_view) ---
+        # --- 1. VARIABLES (Se llenan desde main_view) ---
         self.cb_filtro_tipo = None
         self.cb_umbral_tipo = None
         self.cb_morfologia = None
@@ -19,11 +19,10 @@ class ImagenesView:
         self.sld_umbral_manual = None
         self.sld_morfologia_it = None
         
-        # Esta es la variable clave que fallaba antes:
         self.lbl_valor_filtro = None 
         self.btn_exportar_procesada = None
 
-        # --- 2. BÚSQUEDA DE LO QUE NO FALLA ---
+        # --- 2. BÚSQUEDA DEL RESTO (Visualización) ---
         def encontrar(tipo, nombre):
             return self.ui.findChild(tipo, nombre)
 
@@ -44,12 +43,10 @@ class ImagenesView:
         self.lbl_metadatos = encontrar(QLabel, "lbl_metadatos")
         self.lbl_guardardatos = encontrar(QLabel, "lbl_guardardatos")
 
-        # Configuración básica
+        # Configuración
         if self.sld_axial: self.sld_axial.setOrientation(Qt.Horizontal)
-        if self.sld_coronal: self.sld_coronal.setOrientation(Qt.Horizontal)
-        if self.sld_sagital: self.sld_sagital.setOrientation(Qt.Horizontal)
 
-    # --- ALIAS (Compatibilidad con nombres del controlador) ---
+    # --- ALIAS ---
     @property
     def btn_canny(self): return self.btn_canny_bordes
     @property
@@ -62,12 +59,10 @@ class ImagenesView:
     def sld_morfologia(self): return self.sld_morfologia_it
     @property
     def btn_exportar(self): return self.btn_exportar_procesada
-    
-    # IMPORTANTE: El controlador busca 'lbl_valor_filtro_ref' en un método auxiliar
     @property
     def lbl_valor_filtro_ref(self): return self.lbl_valor_filtro
 
-    # --- MÉTODOS DE VISUALIZACIÓN ---
+    # --- MÉTODOS VISUALES ---
     def mostrar_metadatos(self, metadata: dict):
         if self.lbl_metadatos:
             texto = ""

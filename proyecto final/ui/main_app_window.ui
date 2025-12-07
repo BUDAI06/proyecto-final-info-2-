@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1111</width>
-    <height>840</height>
+    <width>1507</width>
+    <height>847</height>
    </rect>
   </property>
   <property name="baseSize">
@@ -434,7 +434,7 @@ QLabel[style~=&quot;status-warning&quot;] { color: #F57F17; font-weight: bold; }
                       <property name="font">
                        <font>
                         <family>Inter,Roboto,Segoe UI,sans-serif</family>
-                        <pointsize>6</pointsize>
+                        <pointsize>12</pointsize>
                        </font>
                       </property>
                       <property name="text">
@@ -460,7 +460,7 @@ QLabel[style~=&quot;status-warning&quot;] { color: #F57F17; font-weight: bold; }
                       <property name="font">
                        <font>
                         <family>Inter,Roboto,Segoe UI,sans-serif</family>
-                        <pointsize>6</pointsize>
+                        <pointsize>12</pointsize>
                        </font>
                       </property>
                       <property name="text">
@@ -486,7 +486,7 @@ QLabel[style~=&quot;status-warning&quot;] { color: #F57F17; font-weight: bold; }
                       <property name="font">
                        <font>
                         <family>Inter,Roboto,Segoe UI,sans-serif</family>
-                        <pointsize>6</pointsize>
+                        <pointsize>12</pointsize>
                        </font>
                       </property>
                       <property name="text">
@@ -559,7 +559,7 @@ QLabel[style~=&quot;status-warning&quot;] { color: #F57F17; font-weight: bold; }
                     <property name="font">
                      <font>
                       <family>Inter,Roboto,Segoe UI,sans-serif</family>
-                      <pointsize>6</pointsize>
+                      <pointsize>12</pointsize>
                      </font>
                     </property>
                     <property name="text">
@@ -579,57 +579,23 @@ QLabel[style~=&quot;status-warning&quot;] { color: #F57F17; font-weight: bold; }
               </widget>
               <widget class="QWidget" name="page_png">
                <layout class="QGridLayout" name="gridLayout_15">
-                <item row="0" column="0" rowspan="5" colspan="5">
-                 <layout class="QGridLayout" name="are_vizualicacion_">
-                  <item row="1" column="1" colspan="3">
-                   <layout class="QHBoxLayout" name="area_vizualizacin">
-                    <property name="sizeConstraint">
-                     <enum>QLayout::SetMaximumSize</enum>
+                <item row="0" column="0" rowspan="2" colspan="5">
+                 <layout class="QGridLayout" name="area_vizualicacion_">
+                  <item row="0" column="2">
+                   <spacer name="horizontalSpacer_13">
+                    <property name="orientation">
+                     <enum>Qt::Horizontal</enum>
                     </property>
-                    <item>
-                     <widget class="QLabel" name="lbl_img_original">
-                      <property name="text">
-                       <string/>
-                      </property>
-                      <property name="scaledContents">
-                       <bool>true</bool>
-                      </property>
-                     </widget>
-                    </item>
-                    <item>
-                     <widget class="QLabel" name="lbl_img_procesada">
-                      <property name="text">
-                       <string/>
-                      </property>
-                      <property name="scaledContents">
-                       <bool>true</bool>
-                      </property>
-                     </widget>
-                    </item>
-                   </layout>
-                  </item>
-                  <item row="0" column="1" colspan="3">
-                   <layout class="QHBoxLayout" name="horizontalLayout_8">
-                    <property name="sizeConstraint">
-                     <enum>QLayout::SetMinimumSize</enum>
+                    <property name="sizeHint" stdset="0">
+                     <size>
+                      <width>40</width>
+                      <height>20</height>
+                     </size>
                     </property>
-                    <item>
-                     <spacer name="horizontalSpacer_9">
-                      <property name="orientation">
-                       <enum>Qt::Horizontal</enum>
-                      </property>
-                      <property name="sizeHint" stdset="0">
-                       <size>
-                        <width>40</width>
-                        <height>20</height>
-                       </size>
-                      </property>
-                     </spacer>
-                    </item>
-                   </layout>
+                   </spacer>
                   </item>
                   <item row="1" column="0">
-                   <spacer name="verticalSpacer_5">
+                   <spacer name="verticalSpacer_8">
                     <property name="orientation">
                      <enum>Qt::Vertical</enum>
                     </property>
@@ -637,6 +603,52 @@ QLabel[style~=&quot;status-warning&quot;] { color: #F57F17; font-weight: bold; }
                      <size>
                       <width>20</width>
                       <height>40</height>
+                     </size>
+                    </property>
+                   </spacer>
+                  </item>
+                  <item row="5" column="4">
+                   <widget class="QPushButton" name="btn_reset_opencv">
+                    <property name="text">
+                     <string>Limpiar</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="4">
+                   <spacer name="horizontalSpacer_9">
+                    <property name="orientation">
+                     <enum>Qt::Horizontal</enum>
+                    </property>
+                    <property name="sizeHint" stdset="0">
+                     <size>
+                      <width>40</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                   </spacer>
+                  </item>
+                  <item row="5" column="1">
+                   <spacer name="horizontalSpacer_10">
+                    <property name="orientation">
+                     <enum>Qt::Horizontal</enum>
+                    </property>
+                    <property name="sizeHint" stdset="0">
+                     <size>
+                      <width>40</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                   </spacer>
+                  </item>
+                  <item row="0" column="1">
+                   <spacer name="horizontalSpacer_12">
+                    <property name="orientation">
+                     <enum>Qt::Horizontal</enum>
+                    </property>
+                    <property name="sizeHint" stdset="0">
+                     <size>
+                      <width>40</width>
+                      <height>20</height>
                      </size>
                     </property>
                    </spacer>
@@ -652,7 +664,7 @@ QLabel[style~=&quot;status-warning&quot;] { color: #F57F17; font-weight: bold; }
                     <property name="font">
                      <font>
                       <family>Inter,Roboto,Segoe UI,sans-serif</family>
-                      <pointsize>6</pointsize>
+                      <pointsize>12</pointsize>
                      </font>
                     </property>
                     <property name="text">
@@ -666,20 +678,48 @@ QLabel[style~=&quot;status-warning&quot;] { color: #F57F17; font-weight: bold; }
                     </property>
                    </widget>
                   </item>
-                 </layout>
-                </item>
-                <item row="0" column="5" rowspan="5" colspan="2">
-                 <layout class="QGridLayout" name="gridLayout_10">
-                  <item row="2" column="0" colspan="2">
+                  <item row="2" column="0" rowspan="4">
+                   <spacer name="verticalSpacer_5">
+                    <property name="orientation">
+                     <enum>Qt::Vertical</enum>
+                    </property>
+                    <property name="sizeHint" stdset="0">
+                     <size>
+                      <width>20</width>
+                      <height>40</height>
+                     </size>
+                    </property>
+                   </spacer>
+                  </item>
+                  <item row="0" column="3">
+                   <spacer name="horizontalSpacer_14">
+                    <property name="orientation">
+                     <enum>Qt::Horizontal</enum>
+                    </property>
+                    <property name="sizeHint" stdset="0">
+                     <size>
+                      <width>40</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                   </spacer>
+                  </item>
+                  <item row="2" column="3" colspan="2">
                    <widget class="QGroupBox" name="binarizacion_umbral">
                     <property name="title">
                      <string>Binarización y Umbral</string>
                     </property>
                     <layout class="QGridLayout" name="gridLayout_13">
-                     <item row="2" column="0">
-                      <widget class="QPushButton" name="btn_invertir_bin">
-                       <property name="text">
-                        <string>Invertir colores</string>
+                     <item row="0" column="0">
+                      <widget class="QComboBox" name="cb_umbral_tipo">
+                       <property name="font">
+                        <font>
+                         <family>Inter,Roboto,Segoe UI,sans-serif</family>
+                         <pointsize>12</pointsize>
+                        </font>
+                       </property>
+                       <property name="frame">
+                        <bool>true</bool>
                        </property>
                       </widget>
                      </item>
@@ -690,37 +730,24 @@ QLabel[style~=&quot;status-warning&quot;] { color: #F57F17; font-weight: bold; }
                        </property>
                       </widget>
                      </item>
-                     <item row="0" column="0">
-                      <widget class="QComboBox" name="cb_umbral_tipo">
-                       <property name="font">
-                        <font>
-                         <family>Inter,Roboto,Segoe UI,sans-serif</family>
-                         <pointsize>6</pointsize>
-                        </font>
-                       </property>
-                       <property name="frame">
-                        <bool>true</bool>
+                     <item row="2" column="0">
+                      <widget class="QPushButton" name="btn_invertir_bin">
+                       <property name="text">
+                        <string>Invertir colores</string>
                        </property>
                       </widget>
                      </item>
                     </layout>
                    </widget>
                   </item>
-                  <item row="3" column="0">
-                   <widget class="QPushButton" name="btn_reset_opencv">
-                    <property name="text">
-                     <string>Limpiar</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="3" column="1">
+                  <item row="5" column="3">
                    <widget class="QPushButton" name="btn_exportar_procesada">
                     <property name="text">
                      <string>Exportar</string>
                     </property>
                    </widget>
                   </item>
-                  <item row="1" column="0" colspan="2">
+                  <item row="4" column="3" colspan="2">
                    <widget class="QGroupBox" name="filtros_suavizado">
                     <property name="title">
                      <string>Filtros y Suavizado</string>
@@ -732,6 +759,13 @@ QLabel[style~=&quot;status-warning&quot;] { color: #F57F17; font-weight: bold; }
                      <bool>false</bool>
                     </property>
                     <layout class="QGridLayout" name="gridLayout_12">
+                     <item row="1" column="0">
+                      <widget class="QSlider" name="sld_intensidad_filtro">
+                       <property name="orientation">
+                        <enum>Qt::Horizontal</enum>
+                       </property>
+                      </widget>
+                     </item>
                      <item row="2" column="0">
                       <widget class="QLabel" name="label_valor_filtro">
                        <property name="text">
@@ -742,23 +776,16 @@ QLabel[style~=&quot;status-warning&quot;] { color: #F57F17; font-weight: bold; }
                        </property>
                       </widget>
                      </item>
-                     <item row="1" column="0">
-                      <widget class="QSlider" name="sld_intensidad_filtro">
-                       <property name="orientation">
-                        <enum>Qt::Horizontal</enum>
-                       </property>
-                      </widget>
-                     </item>
                      <item row="0" column="0">
                       <widget class="QComboBox" name="cb_filtro_tipo">
                        <property name="font">
                         <font>
                          <family>Inter,Roboto,Segoe UI,sans-serif</family>
-                         <pointsize>6</pointsize>
+                         <pointsize>12</pointsize>
                         </font>
                        </property>
                        <property name="currentIndex">
-                        <number>1</number>
+                        <number>-1</number>
                        </property>
                        <property name="frame">
                         <bool>true</bool>
@@ -768,7 +795,7 @@ QLabel[style~=&quot;status-warning&quot;] { color: #F57F17; font-weight: bold; }
                     </layout>
                    </widget>
                   </item>
-                  <item row="0" column="0" colspan="2">
+                  <item row="3" column="3" colspan="2">
                    <widget class="QGroupBox" name="bordes_morfologia">
                     <property name="title">
                      <string>Bordes y Morfología</string>
@@ -786,11 +813,11 @@ QLabel[style~=&quot;status-warning&quot;] { color: #F57F17; font-weight: bold; }
                        <property name="font">
                         <font>
                          <family>Inter,Roboto,Segoe UI,sans-serif</family>
-                         <pointsize>6</pointsize>
+                         <pointsize>12</pointsize>
                         </font>
                        </property>
                        <property name="currentIndex">
-                        <number>1</number>
+                        <number>-1</number>
                        </property>
                        <property name="frame">
                         <bool>true</bool>
@@ -808,7 +835,88 @@ QLabel[style~=&quot;status-warning&quot;] { color: #F57F17; font-weight: bold; }
                       </widget>
                      </item>
                     </layout>
+                    <zorder>btn_canny_bordes</zorder>
+                    <zorder>sld_morfologia_it</zorder>
+                    <zorder>cb_morfologia</zorder>
                    </widget>
+                  </item>
+                  <item row="5" column="2">
+                   <spacer name="horizontalSpacer_11">
+                    <property name="orientation">
+                     <enum>Qt::Horizontal</enum>
+                    </property>
+                    <property name="sizeHint" stdset="0">
+                     <size>
+                      <width>40</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                   </spacer>
+                  </item>
+                  <item row="1" column="1" rowspan="4" colspan="2">
+                   <layout class="QHBoxLayout" name="area_vizualizacin">
+                    <property name="sizeConstraint">
+                     <enum>QLayout::SetMaximumSize</enum>
+                    </property>
+                    <item>
+                     <widget class="QLabel" name="lbl_img_original">
+                      <property name="minimumSize">
+                       <size>
+                        <width>500</width>
+                        <height>500</height>
+                       </size>
+                      </property>
+                      <property name="text">
+                       <string/>
+                      </property>
+                      <property name="scaledContents">
+                       <bool>true</bool>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QLabel" name="lbl_img_procesada">
+                      <property name="minimumSize">
+                       <size>
+                        <width>500</width>
+                        <height>500</height>
+                       </size>
+                      </property>
+                      <property name="text">
+                       <string/>
+                      </property>
+                      <property name="scaledContents">
+                       <bool>true</bool>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </item>
+                  <item row="1" column="3">
+                   <spacer name="verticalSpacer_9">
+                    <property name="orientation">
+                     <enum>Qt::Vertical</enum>
+                    </property>
+                    <property name="sizeHint" stdset="0">
+                     <size>
+                      <width>20</width>
+                      <height>40</height>
+                     </size>
+                    </property>
+                   </spacer>
+                  </item>
+                  <item row="1" column="4">
+                   <spacer name="verticalSpacer_10">
+                    <property name="orientation">
+                     <enum>Qt::Vertical</enum>
+                    </property>
+                    <property name="sizeHint" stdset="0">
+                     <size>
+                      <width>20</width>
+                      <height>40</height>
+                     </size>
+                    </property>
+                   </spacer>
                   </item>
                  </layout>
                 </item>
@@ -1233,7 +1341,7 @@ Por favor, ingresa tus credenciales para iniciar sesion</string>
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1111</width>
+     <width>1507</width>
      <height>24</height>
     </rect>
    </property>
