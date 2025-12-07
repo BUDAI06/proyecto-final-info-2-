@@ -1,7 +1,7 @@
-# controlador/imagenes_controller.py
 from PyQt5.QtWidgets import QFileDialog, QMessageBox
 from model.procesamiento_imagenes_model import ProcesadorImagenesMedicasModelo
 import os
+import numpy as np
 class ImagenesController:
     def __init__(self, vista):
         self.vista = vista
@@ -67,6 +67,9 @@ class ImagenesController:
         axial = self.modelo.obtener_corte_axial(z)
         coronal = self.modelo.obtener_corte_coronal(y)
         sagital = self.modelo.obtener_corte_sagital(x)
+        
+        if sagital is not None:
+            sagital = np.rot90(sagital, k=1)
 
         self.vista.mostrar_slice(axial, self.vista.lbl_axial)
         self.vista.mostrar_slice(coronal, self.vista.lbl_coronal)
