@@ -4,8 +4,8 @@ import os
 import numpy as np
 import pandas as pd
 from datetime import datetime
-import cv2
 
+# Definir la carpeta de destino relativa al directorio de ejecución
 CARPETA_EXPORTACION = "datos_exportados"
 
 class ImagenesController:
