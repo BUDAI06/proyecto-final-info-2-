@@ -164,6 +164,7 @@ class ImagenesController:
         if self.modelo.img_procesada is None: return
         ruta, _ = QFileDialog.getSaveFileName(None, "Guardar", "procesada.png", "PNG (*.png)")
         if ruta: cv2.imwrite(ruta, self.modelo.img_procesada)
+    
 
     def guardar_datos_csv(self):
         metadata = self.modelo.obtener_metadata_para_csv()
@@ -173,6 +174,7 @@ class ImagenesController:
             df = pd.DataFrame(metadata.items(), columns=['Etiqueta', 'Valor'])
             if not os.path.exists(CARPETA_EXPORTACION): os.makedirs(CARPETA_EXPORTACION)
             df.to_csv(os.path.join(CARPETA_EXPORTACION, f"{nombre_archivo}.csv"), index=False)
+        self.vista.mostrar_mensaje_guardado("Metadata guardada en " + CARPETA_EXPORTACION)
 
     def actualizar_cortes(self):
         if self.modelo.volumen is None: return
