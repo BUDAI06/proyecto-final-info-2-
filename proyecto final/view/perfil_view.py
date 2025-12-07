@@ -12,3 +12,4 @@ class PerfilView(QWidget):
 
     def mostrar_info(self, usuario):
         self.lbl_info.setText(f"Usuario: {usuario}\nEstado: Sesión activa")
+
