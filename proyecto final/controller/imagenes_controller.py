@@ -1,4 +1,4 @@
-
+# controlador/imagenes_controller.py
 from PyQt5.QtWidgets import QFileDialog, QMessageBox, QInputDialog
 from model.procesamiento_imagenes_model import ProcesadorImagenesMedicasModelo
 import os
@@ -16,7 +16,7 @@ class ImagenesController:
 
         # Eventos
         self.vista.btn_cargar_imagen.clicked.connect(self.cargar_archivo)
-        self.vista.btn_guardardatos.clicked.connect(self.guardar_datos_csv) # <-- NUEVA CONEXIÓN
+        self.vista.btn_guardardatos.clicked.connect(self.guardar_datos_csv)
         self.vista.sld_axial.valueChanged.connect(self.actualizar_cortes)
         self.vista.sld_coronal.valueChanged.connect(self.actualizar_cortes)
         self.vista.sld_sagital.valueChanged.connect(self.actualizar_cortes)
@@ -119,6 +119,11 @@ class ImagenesController:
 
 
     def actualizar_cortes(self):
+        
+        if self.modelo.volumen is None:
+            return
+        
+
         z = self.vista.sld_axial.value()
         y = self.vista.sld_coronal.value()
         x = self.vista.sld_sagital.value()
