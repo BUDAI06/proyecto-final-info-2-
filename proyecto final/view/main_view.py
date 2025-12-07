@@ -88,8 +88,4 @@ class MainAppView(QMainWindow):
     def mostrar_perfil(self):
         if self.page_perfil:
             self.stacked.setCurrentWidget(self.page_perfil)
-            self.stacked.setCurrentWidget(self.page_tabular)
 
-    def mostrar_perfil(self):
-        if self.page_perfil:
-            self.stacked.setCurrentWidget(self.page_perfil)
