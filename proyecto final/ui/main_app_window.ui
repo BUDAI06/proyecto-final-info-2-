@@ -184,7 +184,7 @@ QLabel[style~=&quot;status-warning&quot;] { color: #F57F17; font-weight: bold; }
           <property name="maximumSize">
            <size>
             <width>90</width>
-            <height>90</height>
+            <height>110</height>
            </size>
           </property>
           <property name="sizeIncrement">

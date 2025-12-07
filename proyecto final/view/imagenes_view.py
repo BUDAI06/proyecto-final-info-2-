@@ -10,6 +10,7 @@ class ImagenesView:
 
         # --- REFERENCIAS A LA UI ---
         self.btn_cargar_imagen = self.ui.findChild(QPushButton, "btn_cargar_imagen")
+        self.btn_guardardatos = self.ui.findChild(QPushButton, "btn_guardardatos") 
 
         self.lbl_axial = self.ui.findChild(QLabel, "lbl_axial")
         self.lbl_coronal = self.ui.findChild(QLabel, "lbl_coronal")
@@ -20,10 +21,10 @@ class ImagenesView:
         self.sld_sagital = self.ui.findChild(QSlider, "sld_sagital")
 
         self.lbl_metadatos = self.ui.findChild(QLabel, "lbl_metadatos")
+        self.lbl_guardardatos = self.ui.findChild(QLabel, "lbl_guardardatos") 
 
         # --- CONFIGURACIÓN INICIAL ---
-        
-        # Validación de seguridad: Solo configuramos si los encontramos
+    
         if self.sld_axial:
             self.sld_axial.setOrientation(Qt.Horizontal)
         else:
@@ -38,17 +39,26 @@ class ImagenesView:
     # --- MÉTODOS PARA ACTUALIZAR LA VISTA ---
 
     def mostrar_metadatos(self, metadata: dict):
-        # Verificamos que la etiqueta exista antes de intentar escribir en ella
         if self.lbl_metadatos:
             texto = ""
             for clave, valor in metadata.items():
                 texto += f"{clave}: {valor}\n"
             self.lbl_metadatos.setText(texto)
+        
+        if self.lbl_guardardatos:
+            self.lbl_guardardatos.setText("")
+
+
+    def mostrar_mensaje_guardado(self, mensaje):
+        """Muestra un mensaje de confirmación de guardado en lbl_guardardatos."""
+        if self.lbl_guardardatos:
+            self.lbl_guardardatos.setText(mensaje)
+
 
     def mostrar_slice(self, data: np.ndarray, label: QLabel):
         """Convierte un array HU a imagen y lo pone en un QLabel."""
         if label is None:
-            return print("label de metadatos no encontrada") # Evitamos error si el label no se encontró
+            return print("label de metadatos no encontrada") 
 
         min_val = np.min(data)
         max_val = np.max(data)
@@ -63,7 +73,7 @@ class ImagenesView:
 
         img = norm.astype(np.uint8)
 
-        # La corrección para el TypeError: Asegura que el array sea contiguo en memoria
+        
         img = np.ascontiguousarray(img)
 
         h, w = img.shape

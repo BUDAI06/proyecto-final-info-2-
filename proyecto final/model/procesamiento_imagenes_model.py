@@ -137,9 +137,23 @@ class ProcesadorImagenesMedicasModelo:
             "ID del Paciente": getattr(dic, "PatientID", "N/A"),
             "Estudio": getattr(dic, "StudyDescription", "N/A"),
             "Modalidad": getattr(dic, "Modality", "N/A"),
-            "Dimensiones": str(self.shape)
+            "Dimensiones": str(self.shape),
+            
+            # --- DATOS ADICIONALES PARA CSV ---
+            "Fecha del Estudio": getattr(dic, "StudyDate", "N/A"),
+            "UID del Estudio": getattr(dic, "StudyInstanceUID", "N/A")
+            # -----------------------------------
         }
-
+        
+    def obtener_metadata_para_csv(self):
+        """Devuelve los metadatos para ser guardados en CSV."""
+        if not self.metadata:
+            # Si se cargó un NIFTI y no tiene todas las etiquetas DICOM, aún devolvemos lo que tenemos.
+            if self.tipo_archivo == "NIFTI" and self.shape is not None:
+                 return self.metadata
+            return None
+        return self.metadata
+        
     # -----------------------------
     # OBTENER CORTES
     # -----------------------------
@@ -160,4 +174,3 @@ class ProcesadorImagenesMedicasModelo:
         if self.volumen is None:
             return None
         return self.volumen[:, :, x]
-
