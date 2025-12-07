@@ -1,76 +1,116 @@
-from PyQt5.QtWidgets import QPushButton, QWidget
-from model.autenticacion_model import AutenticacionModel
+# controller/perfil_controller.py
+
+from PyQt5.QtWidgets import QPushButton, QWidget, QLabel
+from model.autenticacion_model import AutenticacionModel 
+from controller.login_controller import LoginController # <--- Necesario para la cámara
 
 class PerfilController:
+    """
+    Controlador puente que gestiona la página de Perfil y DELEGA la autenticación
+    y la captura de cámara al LoginController.
+    """
     def __init__(self, main_view, stacked_widget, controlador_principal):
 
         self.main_view = main_view
         self.stacked = stacked_widget
         self.ctrl_main = controlador_principal
-        self.modelo = AutenticacionModel()
-        self.usuario_actual = None
+        self.modelo = AutenticacionModel() 
+        
+        # El usuario actual se obtiene del MainController (la fuente de verdad)
+        self.usuario_actual = self.ctrl_main.usuario 
 
-        self.page_login = self.stacked.findChild(QWidget, "page_login")
+        # --- 1. Inicialización del Controlador de Login/Cámara ---
+        # El LoginController ahora solo requiere el MainController (2 argumentos en total)
+        self.ctrl_login = LoginController(self.ctrl_main) 
+
+        # --- 2. Mapeo de Widgets de Navegación y Perfil ---
+        
         self.page_perfil = self.stacked.findChild(QWidget, "page_perfil")
-
-        self.txt_user = self.page_login.findChild(object, "txt_login_usuario")
-        self.txt_pass = self.page_login.findChild(object, "txt_login_password")
-        self.btn_login = self.page_login.findChild(object, "btn_login")
-        self.lbl_login_msg = self.page_login.findChild(object, "lbl_login_msg")
-
-        self.lbl_perfil = self.page_perfil.findChild(object, "lbl_perfil_info")
-        self.btn_logout = self.page_perfil.findChild(object, "btn_logout")
-
+        
+        # Mapeo de widgets de perfil
+        if self.page_perfil:
+            self.lbl_perfil = self.page_perfil.findChild(QLabel, "lbl_perfil_info")
+            self.btn_logout = self.page_perfil.findChild(QPushButton, "btn_logout")
+        else:
+            self.lbl_perfil = None
+            self.btn_logout = None
+        
         self.btn_menu_perfil = self.main_view.findChild(QPushButton, "btn_ir_perfil")
 
-        self.btn_login.clicked.connect(self.intentar_login)
-        self.btn_logout.clicked.connect(self.logout)
-        self.btn_menu_perfil.clicked.connect(self.mostrar)
+        # --- 3. Conexiones de Botones ---
         
+        if self.btn_logout is not None:
+            self.btn_logout.clicked.connect(self.logout)
+        
+        if self.btn_menu_perfil is not None:
+            self.btn_menu_perfil.clicked.connect(self.mostrar)
+            
+        self._sincronizar_estado_menu()
+
+
+    def _sincronizar_estado_menu(self):
+        """Ajusta el texto del botón 'Perfil' según si hay sesión iniciada."""
+        self.usuario_actual = self.ctrl_main.usuario
+        if self.usuario_actual is None:
+            if self.btn_menu_perfil:
+                self.btn_menu_perfil.setText("Iniciar sesión")
+        else:
+            if self.btn_menu_perfil:
+                self.btn_menu_perfil.setText("Perfil")
+
     def mostrar_login_forzado(self):
+        """
+        Muestra la ventana de Login (cámara) y detiene el menú principal. 
+        Llamado al inicio de la aplicación o cuando se requiere login.
+        """
         self.usuario_actual = None
-        self.stacked.setCurrentWidget(self.page_login)
+        self.ctrl_main.deshabilitar_menu()
+        
+        # Delega la tarea de mostrar la ventana de login (cámara) al LoginController
+        self.ctrl_login.mostrar_login()
+        
+        # 🚨 LÍNEA CRÍTICA ELIMINADA:
+        # La ventana principal (self.main_view) NO se muestra aquí. 
+        # Debe permanecer oculta hasta MainController.mostrar_principal().
+        # self.main_view.show() # <- ¡Esta línea fue eliminada!
 
     def mostrar(self):
+        """
+        Muestra la página de Perfil si el usuario está logueado, o INICIA el proceso de Login.
+        """
+        self.usuario_actual = self.ctrl_main.usuario 
+        
         if self.usuario_actual is None:
-            self.stacked.setCurrentWidget(self.page_login)
+            # Si no hay usuario, iniciamos el proceso de login (que abre la ventana externa)
+            self.mostrar_login_forzado()
         else:
-            self.actualizar_perfil()
-            self.stacked.setCurrentWidget(self.page_perfil)
-
-    def intentar_login(self):
-        username = self.txt_user.text().strip()
-        password = self.txt_pass.text().strip()
-
-        datos = self.modelo.validar_credenciales(username, password)
-        
-        if datos is None:
-            self.lbl_login_msg.setText("Credenciales incorrectas.")
-            return
-        
-        self.usuario_actual = datos
-        self.btn_menu_perfil.setText("Perfil")
-        self.lbl_login_msg.setText("")
-
-        self.actualizar_perfil()
-        self.stacked.setCurrentWidget(self.page_perfil)
-
-        self.ctrl_main.set_usuario_logueado(datos)
-
+            # Si hay usuario, navegamos a la página de perfil dentro del stacked widget
+            if self.page_perfil:
+                self.actualizar_perfil()
+                self.stacked.setCurrentWidget(self.page_perfil)
+                self.ctrl_main.habilitar_menu() 
+    
     def actualizar_perfil(self):
-        if self.usuario_actual:
+        """Muestra los datos del usuario logueado en la etiqueta lbl_perfil_info."""
+        self.usuario_actual = self.ctrl_main.usuario 
+        
+        if self.usuario_actual and self.lbl_perfil:
             info = (
-                f"<b>Usuario:</b> {self.usuario_actual['username']}<br>"
-                f"<b>Nombre:</b> {self.usuario_actual['nombre']}<br>"
-                f"<b>Rol:</b> {self.usuario_actual['rol']}"
+                f"<b>Usuario:</b> {self.usuario_actual.get('username', 'N/A')}<br>"
+                f"<b>Nombre:</b> {self.usuario_actual.get('nombre', 'N/A')}<br>"
+                f"<b>Rol:</b> {self.usuario_actual.get('rol', 'N/A')}"
             )
-            self.lbl_perfil.setText(info)
+            if isinstance(self.lbl_perfil, QLabel):
+                self.lbl_perfil.setText(info)
 
     def logout(self):
-        self.usuario_actual = None
-        self.txt_user.setText("")
-        self.txt_pass.setText("")
-        self.lbl_login_msg.setText("")
-        self.lbl_perfil.setText("")
-        self.btn_menu_perfil.setText("Iniciar sesión")
-        self.stacked.setCurrentWidget(self.page_login)
+        """Cierra la sesión del usuario."""
+        if self.lbl_perfil:
+             if isinstance(self.lbl_perfil, QLabel):
+                self.lbl_perfil.setText("")
+            
+        self.ctrl_main.logout()
+        self._sincronizar_estado_menu()
+        
+        # Forzar la vista de login después del logout
+        self.mostrar_login_forzado()
