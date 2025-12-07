@@ -20,6 +20,9 @@ class MainController:
         self.vista = vista
         self.stacked = self.vista.stacked 
         
+        # Ocultar la ventana principal inmediatamente en el constructor
+        self.vista.hide()
+        
         # --- 1. Inicialización de Controladores Secundarios ---
         
         # Senales 
@@ -28,7 +31,6 @@ class MainController:
             self.ctrl_senales = SenalesController(self.vista_senales)
         else:
             self.ctrl_senales = None
-            print("ADVERTENCIA: vista_senales no encontrada en MainAppView.")
 
         # Imagenes
         if hasattr(self.vista, 'vista_imagenes') and self.vista.vista_imagenes:
@@ -36,66 +38,60 @@ class MainController:
             self.ctrl_imagenes = ImagenesController(self.vista_imagenes)
         else:
             self.ctrl_imagenes = None
-            print("ADVERTENCIA: vista_imagenes no encontrada en MainAppView.")
 
         # Tabular
         self.ctrl_tabular = TabularController(self.vista)
 
-
         # --- 2. Inicialización de Perfil y Estado de Sesión ---
         
         self.usuario = None
-        
-        # Inicialización del PerfilController (maneja la lógica de las páginas Perfil/Login)
-        # PerfilController requiere el MainController (self)
         self.ctrl_perfil = PerfilController(self.vista, self.vista.stacked, self)
 
-        
         # --- 3. Conexión de Navegación y Sesión ---
         
-        if hasattr(self.vista, 'btn_ir_imagenes'):
+        if hasattr(self.vista, 'btn_ir_imagenes') and self.vista.btn_ir_imagenes:
             self.vista.btn_ir_imagenes.clicked.connect(self.vista.mostrar_imagenes)
-        if hasattr(self.vista, 'btn_ir_senales'):
+        if hasattr(self.vista, 'btn_ir_senales') and self.vista.btn_ir_senales:
             self.vista.btn_ir_senales.clicked.connect(self.vista.mostrar_senales)
-        if hasattr(self.vista, 'btn_ir_tabular'):
+        if hasattr(self.vista, 'btn_ir_tabular') and self.vista.btn_ir_tabular:
             self.vista.btn_ir_tabular.clicked.connect(self.vista.mostrar_tabular)
         
-        # El botón de perfil lo gestiona PerfilController.
-        if hasattr(self.vista, 'btn_ir_perfil'):
-             # Conexión del menú a la lógica de PerfilController
+        if hasattr(self.vista, 'btn_ir_perfil') and self.vista.btn_ir_perfil:
              self.vista.btn_ir_perfil.clicked.connect(self.ctrl_perfil.mostrar)
             
-        if hasattr(self.vista, 'btn_logout'):
+        if hasattr(self.vista, 'btn_logout') and self.vista.btn_logout:
             self.vista.btn_logout.clicked.connect(self.logout)
         
-        # Estado inicial
+        # Estado inicial: Menú deshabilitado
         self.deshabilitar_menu()
 
-
-    def iniciar_flujo_login(self):
-        """Llamado desde main.py. Inicia el ciclo de login de la aplicación."""
-        print("--- INICIANDO FLUJO DE LOGIN ---")
-        # El PerfilController es quien sabe cómo mostrar el LoginController
+    def mostrar_login_inicial(self):
+        """Prepara el login. Si el login es un widget interno, se mostrará
+        vía ctrl_perfil, pero la ventana sigue oculta hasta que se valide."""
+        print("--- FLUJO DE LOGIN INICIADO ---")
         self.ctrl_perfil.mostrar_login_forzado()
-
+        # NOTA: Si el login es una VENTANA aparte, aquí se llamaría a esa ventana.
+        # Si el login es parte del .ui de la principal, la ventana DEBE mostrarse 
+        # pero podemos forzar que se vea solo el widget de login.
+        self.vista.show()
 
     def mostrar_principal(self, usuario):
         """
-        Método llamado por LoginController tras un login exitoso.
-        Abre la ventana principal e inicializa el estado del usuario.
+        Método llamado tras login exitoso. 
+        AQUÍ es donde la ventana principal se hace visible finalmente.
         """
         self.usuario = usuario
         
         if 'username' in usuario:
-            print(f"Login exitoso: {usuario['username']}")
+            print(f"Sesión iniciada para: {usuario['username']}")
         
-        self.vista.mostrar_home()
-        # La vista principal se hace visible aquí, si no lo estaba
-        if not self.vista.isVisible():
-             self.vista.show() 
-             
+        # Habilitar elementos antes de mostrar
         self.habilitar_menu()
-        self.ctrl_perfil._sincronizar_estado_menu() 
+        self.ctrl_perfil._sincronizar_estado_menu()
+        
+        # Ir a la página de inicio y MOSTRAR la ventana
+        self.vista.mostrar_home()
+        self.vista.show() 
 
     def set_usuario_logueado(self, datos_usuario):
         self.usuario = datos_usuario
@@ -104,30 +100,26 @@ class MainController:
     def logout(self):
         self.usuario = None
         self.deshabilitar_menu()
+        self.vista.hide() # Ocultar todo al cerrar sesión
         self.ctrl_perfil.mostrar_login_forzado()
+        self.vista.show()
 
     def deshabilitar_menu(self):
-        if hasattr(self.vista, 'btn_ir_imagenes') and self.vista.btn_ir_imagenes:
-            self.vista.btn_ir_imagenes.setEnabled(False)
-        if hasattr(self.vista, 'btn_ir_senales') and self.vista.btn_ir_senales:
-            self.vista.btn_ir_senales.setEnabled(False)
-        if hasattr(self.vista, 'btn_ir_tabular') and self.vista.btn_ir_tabular:
-            self.vista.btn_ir_tabular.setEnabled(False)
+        """Oculta los botones laterales para que no existan visualmente durante el login."""
+        botones = ['btn_ir_imagenes', 'btn_ir_senales', 'btn_ir_tabular', 'btn_logout']
+        for btn_name in botones:
+            if hasattr(self.vista, btn_name):
+                getattr(self.vista, btn_name).hide()
         
-        if hasattr(self.vista, 'btn_logout') and self.vista.btn_logout:
-            self.vista.btn_logout.hide()
-        if hasattr(self.vista, 'btn_ir_perfil') and self.vista.btn_ir_perfil:
+        if hasattr(self.vista, 'btn_ir_perfil'):
             self.vista.btn_ir_perfil.setText("Iniciar sesión")
 
     def habilitar_menu(self):
-        if hasattr(self.vista, 'btn_ir_imagenes') and self.vista.btn_ir_imagenes:
-            self.vista.btn_ir_imagenes.setEnabled(True)
-        if hasattr(self.vista, 'btn_ir_senales') and self.vista.btn_ir_senales:
-            self.vista.btn_ir_senales.setEnabled(True)
-        if hasattr(self.vista, 'btn_ir_tabular') and self.vista.btn_ir_tabular:
-            self.vista.btn_ir_tabular.setEnabled(True)
+        """Muestra los botones laterales una vez el usuario ha ingresado."""
+        botones = ['btn_ir_imagenes', 'btn_ir_senales', 'btn_ir_tabular', 'btn_logout']
+        for btn_name in botones:
+            if hasattr(self.vista, btn_name):
+                getattr(self.vista, btn_name).show()
         
-        if hasattr(self.vista, 'btn_logout') and self.vista.btn_logout:
-            self.vista.btn_logout.show()
-        if hasattr(self.vista, 'btn_ir_perfil') and self.vista.btn_ir_perfil:
+        if hasattr(self.vista, 'btn_ir_perfil'):
             self.vista.btn_ir_perfil.setText("Perfil")

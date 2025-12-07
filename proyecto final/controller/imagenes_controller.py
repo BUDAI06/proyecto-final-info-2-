@@ -1,9 +1,9 @@
+# imagenes_controller.py
 from PyQt5.QtWidgets import QFileDialog, QMessageBox, QInputDialog
 from model.procesamiento_imagenes_model import ProcesadorImagenesMedicasModelo
 import os
 import numpy as np
 import pandas as pd
-from datetime import datetime
 import cv2
 
 CARPETA_EXPORTACION = "datos_exportados"
@@ -20,7 +20,6 @@ class ImagenesController:
         if self.vista.btn_guardardatos:
             self.vista.btn_guardardatos.clicked.connect(self.guardar_datos_csv)
 
-        # Sliders DICOM
         for sld in [self.vista.sld_axial, self.vista.sld_coronal, self.vista.sld_sagital]:
             if sld: 
                 sld.valueChanged.connect(self.actualizar_cortes)
@@ -47,69 +46,63 @@ class ImagenesController:
             self.vista.cb_morfologia.addItems(["Ninguna", "Erosión", "Dilatación", "Apertura", "Cierre"])
             self.vista.cb_morfologia.currentIndexChanged.connect(self.aplicar_procesamiento)
 
-        # SLIDERS
-        if self.vista.sld_intensidad:
-            self.vista.sld_intensidad.setRange(1, 20)
-            self.vista.sld_intensidad.setValue(5)
-            self.vista.sld_intensidad.sliderReleased.connect(self.aplicar_procesamiento)
+        # SLIDERS (Nombres corregidos segun inyección de main_view)
+        if self.vista.sld_intensidad_filtro:
+            self.vista.sld_intensidad_filtro.setRange(1, 20)
+            self.vista.sld_intensidad_filtro.setValue(5)
+            self.vista.sld_intensidad_filtro.sliderReleased.connect(self.aplicar_procesamiento)
 
-        if self.vista.sld_umbral:
-            self.vista.sld_umbral.setRange(0, 255)
-            self.vista.sld_umbral.setValue(127)
-            self.vista.sld_umbral.sliderReleased.connect(self.aplicar_procesamiento)
+        if self.vista.sld_umbral_manual:
+            self.vista.sld_umbral_manual.setRange(0, 255)
+            self.vista.sld_umbral_manual.setValue(127)
+            self.vista.sld_umbral_manual.sliderReleased.connect(self.aplicar_procesamiento)
 
-        if self.vista.sld_morfologia:
-            self.vista.sld_morfologia.setRange(1, 10)
-            self.vista.sld_morfologia.setValue(1)
-            self.vista.sld_morfologia.sliderReleased.connect(self.aplicar_procesamiento)
+        if self.vista.sld_morfologia_it:
+            self.vista.sld_morfologia_it.setRange(1, 10)
+            self.vista.sld_morfologia_it.setValue(1)
+            self.vista.sld_morfologia_it.sliderReleased.connect(self.aplicar_procesamiento)
 
         # BOTONES
         if self.vista.btn_reset_opencv:
             self.vista.btn_reset_opencv.clicked.connect(self.reset_filtros)
 
-        if self.vista.btn_canny:
-            self.vista.btn_canny.clicked.connect(self.detectar_bordes)
+        if self.vista.btn_canny_bordes:
+            self.vista.btn_canny_bordes.clicked.connect(self.detectar_bordes)
 
-        if self.vista.btn_exportar:
-            self.vista.btn_exportar.clicked.connect(self.exportar_imagen)
+        if self.vista.btn_exportar_procesada:
+            self.vista.btn_exportar_procesada.clicked.connect(self.exportar_imagen)
 
     def cargar_archivo(self):
-        """Muestra ventana de pregunta y abre diálogo de archivo o carpeta."""
         self.vista.mostrar_mensaje_guardado("")
         
         msg = QMessageBox()
         msg.setIcon(QMessageBox.Question)
         msg.setText("¿Qué tipo de recurso deseas cargar?")
         msg.setWindowTitle("Selección de recurso")
-        
         btn_archivo = msg.addButton("Archivo Individual", QMessageBox.YesRole)
         btn_carpeta = msg.addButton("Carpeta (Serie DICOM)", QMessageBox.NoRole)
         msg.exec_()
 
         ruta = None
         if msg.clickedButton() == btn_archivo:
-            ruta, _ = QFileDialog.getOpenFileName(
-                None, "Cargar", "",
-                "Médicas (*.dcm *.nii *.nii.gz);;Estándar (*.jpg *.png *.jpeg);;Todos (*.*)"
-            )
+            ruta, _ = QFileDialog.getOpenFileName(None, "Cargar", "", "Médicas (*.dcm *.nii *.nii.gz);;Estándar (*.jpg *.png *.jpeg)")
         elif msg.clickedButton() == btn_carpeta:
             ruta = QFileDialog.getExistingDirectory(None, "Seleccionar Carpeta")
 
-        if not ruta:
-            return
+        if not ruta: return
 
         if self.modelo.cargar_y_procesar(ruta):
             if self.modelo.tipo_archivo == "OPENCV":
                 if self.vista.stacked_procesamiento:
-                    self.vista.stacked_procesamiento.setCurrentIndex(1)
+                    self.vista.stacked_procesamiento.setCurrentIndex(1) # Cambia a panel PNG
                 self.actualizar_vista_opencv()
             else:
                 if self.vista.stacked_procesamiento:
-                    self.vista.stacked_procesamiento.setCurrentIndex(0)
+                    self.vista.stacked_procesamiento.setCurrentIndex(0) # Cambia a panel DICOM
                 z, y, x = self.modelo.shape
-                if self.vista.sld_axial: self.vista.sld_axial.setMaximum(z - 1)
-                if self.vista.sld_coronal: self.vista.sld_coronal.setMaximum(y - 1)
-                if self.vista.sld_sagital: self.vista.sld_sagital.setMaximum(x - 1)
+                self.vista.sld_axial.setMaximum(z - 1)
+                self.vista.sld_coronal.setMaximum(y - 1)
+                self.vista.sld_sagital.setMaximum(x - 1)
                 self.actualizar_cortes()
 
             self.vista.mostrar_metadatos(self.modelo.metadata)
@@ -119,7 +112,7 @@ class ImagenesController:
         img = self.modelo.img_original.copy()
         
         filtro = self.vista.cb_filtro_tipo.currentText()
-        k = self.vista.sld_intensidad.value()
+        k = self.vista.sld_intensidad_filtro.value()
         if k % 2 == 0: k += 1
         
         if filtro == "Desenfoque Gausiano": img = cv2.GaussianBlur(img, (k, k), 0)
@@ -127,7 +120,7 @@ class ImagenesController:
         elif filtro == "Bilateral": img = cv2.bilateralFilter(img, 9, 75, 75)
 
         umbral_tipo = self.vista.cb_umbral_tipo.currentText()
-        thresh_val = self.vista.sld_umbral.value()
+        thresh_val = self.vista.sld_umbral_manual.value()
         
         if umbral_tipo != "Ninguno":
             gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY) if len(img.shape) == 3 else img
@@ -137,7 +130,7 @@ class ImagenesController:
             elif umbral_tipo == "Adaptativo": img = cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 11, 2)
 
         morfo = self.vista.cb_morfologia.currentText()
-        its = self.vista.sld_morfologia.value()
+        its = self.vista.sld_morfologia_it.value()
         kernel = np.ones((3,3), np.uint8)
         
         if morfo == "Erosión": img = cv2.erode(img, kernel, iterations=its)
@@ -157,9 +150,9 @@ class ImagenesController:
     def reset_filtros(self):
         if self.modelo.img_original is not None:
             self.modelo.img_procesada = self.modelo.img_original.copy()
-            if self.vista.cb_filtro_tipo: self.vista.cb_filtro_tipo.setCurrentIndex(0)
-            if self.vista.cb_umbral_tipo: self.vista.cb_umbral_tipo.setCurrentIndex(0)
-            if self.vista.cb_morfologia: self.vista.cb_morfologia.setCurrentIndex(0)
+            self.vista.cb_filtro_tipo.setCurrentIndex(0)
+            self.vista.cb_umbral_tipo.setCurrentIndex(0)
+            self.vista.cb_morfologia.setCurrentIndex(0)
             self.actualizar_vista_opencv()
 
     def actualizar_vista_opencv(self):

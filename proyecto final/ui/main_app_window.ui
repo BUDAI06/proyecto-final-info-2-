@@ -274,7 +274,7 @@ QLabel[style~=&quot;status-warning&quot;] { color: #F57F17; font-weight: bold; }
          <bool>true</bool>
         </property>
         <property name="currentIndex">
-         <number>1</number>
+         <number>0</number>
         </property>
         <widget class="QWidget" name="page_home">
          <property name="minimumSize">
@@ -408,7 +408,7 @@ QLabel[style~=&quot;status-warning&quot;] { color: #F57F17; font-weight: bold; }
                       <property name="font">
                        <font>
                         <family>Inter,Roboto,Segoe UI,sans-serif</family>
-                        <pointsize>12</pointsize>
+                        <pointsize>-1</pointsize>
                        </font>
                       </property>
                       <property name="text">
@@ -434,7 +434,7 @@ QLabel[style~=&quot;status-warning&quot;] { color: #F57F17; font-weight: bold; }
                       <property name="font">
                        <font>
                         <family>Inter,Roboto,Segoe UI,sans-serif</family>
-                        <pointsize>12</pointsize>
+                        <pointsize>-1</pointsize>
                        </font>
                       </property>
                       <property name="text">
@@ -460,7 +460,7 @@ QLabel[style~=&quot;status-warning&quot;] { color: #F57F17; font-weight: bold; }
                       <property name="font">
                        <font>
                         <family>Inter,Roboto,Segoe UI,sans-serif</family>
-                        <pointsize>12</pointsize>
+                        <pointsize>-1</pointsize>
                        </font>
                       </property>
                       <property name="text">
@@ -533,7 +533,7 @@ QLabel[style~=&quot;status-warning&quot;] { color: #F57F17; font-weight: bold; }
                     <property name="font">
                      <font>
                       <family>Inter,Roboto,Segoe UI,sans-serif</family>
-                      <pointsize>12</pointsize>
+                      <pointsize>-1</pointsize>
                      </font>
                     </property>
                     <property name="text">
@@ -579,7 +579,7 @@ QLabel[style~=&quot;status-warning&quot;] { color: #F57F17; font-weight: bold; }
                     <property name="font">
                      <font>
                       <family>Inter,Roboto,Segoe UI,sans-serif</family>
-                      <pointsize>12</pointsize>
+                      <pointsize>-1</pointsize>
                      </font>
                     </property>
                     <property name="text">
@@ -662,7 +662,7 @@ QLabel[style~=&quot;status-warning&quot;] { color: #F57F17; font-weight: bold; }
                        <property name="font">
                         <font>
                          <family>Inter,Roboto,Segoe UI,sans-serif</family>
-                         <pointsize>12</pointsize>
+                         <pointsize>-1</pointsize>
                         </font>
                        </property>
                        <property name="frame">
@@ -721,11 +721,11 @@ QLabel[style~=&quot;status-warning&quot;] { color: #F57F17; font-weight: bold; }
                        <property name="font">
                         <font>
                          <family>Inter,Roboto,Segoe UI,sans-serif</family>
-                         <pointsize>12</pointsize>
+                         <pointsize>-1</pointsize>
                         </font>
                        </property>
                        <property name="currentIndex">
-                        <number>0</number>
+                        <number>-1</number>
                        </property>
                        <property name="frame">
                         <bool>true</bool>
@@ -753,11 +753,11 @@ QLabel[style~=&quot;status-warning&quot;] { color: #F57F17; font-weight: bold; }
                        <property name="font">
                         <font>
                          <family>Inter,Roboto,Segoe UI,sans-serif</family>
-                         <pointsize>12</pointsize>
+                         <pointsize>-1</pointsize>
                         </font>
                        </property>
                        <property name="currentIndex">
-                        <number>0</number>
+                        <number>-1</number>
                        </property>
                        <property name="frame">
                         <bool>true</bool>

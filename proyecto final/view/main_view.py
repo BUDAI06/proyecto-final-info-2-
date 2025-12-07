@@ -43,24 +43,6 @@ class MainAppView(QMainWindow):
             else:
                 print(f"   ❌ ERROR FATAL: No se encontró '{nombre_xml}' en el UI.")
 
-        # --- A. COMBOBOXES (Limpiamos estilo para evitar texto invisible) ---
-        conectar("cb_filtro_tipo", "cb_filtro_tipo", es_combo=True)
-        conectar("cb_umbral_tipo", "cb_umbral_tipo", es_combo=True)
-        conectar("cb_morfologia", "cb_morfologia", es_combo=True)
-
-        # --- B. RESTO DE CONTROLES ---
-        conectar("btn_canny_bordes", "btn_canny_bordes")
-        conectar("btn_invertir_bin", "btn_invertir_bin")
-        
-        conectar("sld_intensidad_filtro", "sld_intensidad_filtro")
-        conectar("sld_umbral_manual", "sld_umbral_manual")
-        conectar("sld_morfologia_it", "sld_morfologia_it")
-        
-        conectar("label_valor_filtro", "lbl_valor_filtro")
-        conectar("btn_exportar_procesada", "btn_exportar_procesada")
-        
-        print("-----------------------------------------------\n")
-
         # --- 4. REFERENCIAS DE NAVEGACIÓN ---
         self.btn_ir_imagenes = self.findChild(QPushButton, "btn_ir_imagenes")
         self.btn_ir_senales = self.findChild(QPushButton, "btn_ir_senales")
