@@ -63,6 +63,9 @@ class ImagenesView:
 
         img = norm.astype(np.uint8)
 
+        # La corrección para el TypeError: Asegura que el array sea contiguo en memoria
+        img = np.ascontiguousarray(img)
+
         h, w = img.shape
         # bytesPerLine es importante para evitar deformaciones en algunas imágenes
         bytesPerLine = w 

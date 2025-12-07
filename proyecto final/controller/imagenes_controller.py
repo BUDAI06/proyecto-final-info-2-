@@ -1,3 +1,4 @@
+# controlador/imagenes_controller.py
 from PyQt5.QtWidgets import QFileDialog, QMessageBox
 from model.procesamiento_imagenes_model import ProcesadorImagenesMedicasModelo
 import os
@@ -69,7 +70,8 @@ class ImagenesController:
         sagital = self.modelo.obtener_corte_sagital(x)
         
         if sagital is not None:
-            sagital = np.rot90(sagital, k=1)
+            # Rotamos 270 grados (k=3) en sentido antihorario, que a menudo corrige la orientación sagital.
+            sagital = np.rot90(sagital, k=-1)
 
         self.vista.mostrar_slice(axial, self.vista.lbl_axial)
         self.vista.mostrar_slice(coronal, self.vista.lbl_coronal)

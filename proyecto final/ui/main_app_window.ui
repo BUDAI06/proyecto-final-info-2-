@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>606</width>
-    <height>545</height>
+    <width>750</width>
+    <height>606</height>
    </rect>
   </property>
   <property name="baseSize">
@@ -17,14 +17,153 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>Projecto Final</string>
+   <string>Projecto Final - Ingeniería UdeA</string>
   </property>
   <property name="styleSheet">
-   <string notr="true"/>
+   <string>/* Estilo Global UdeA - Ingeniería */
+QWidget {
+    background-color: #F4F6F8; /* Fondo general gris muy claro para descanso visual */
+    color: #1A1A1A; /* Texto casi negro para mejor lectura técnica */
+    font-family: &quot;Inter&quot;, &quot;Roboto&quot;, &quot;Segoe UI&quot;, sans-serif;
+    font-size: 13px;
+}
+
+/* Área Central */
+QMainWindow, QWidget#centralwidget {
+    background-color: #FFFFFF;
+}
+
+/* Agrupadores y Contenedores */
+QGroupBox {
+    background-color: #FFFFFF;
+    border: 1px solid #D1D5DB;
+    border-radius: 4px;
+    margin-top: 12px;
+    padding: 8px;
+    font-weight: 600;
+}
+QGroupBox::title {
+    subcontrol-origin: margin;
+    subcontrol-position: top left;
+    left: 10px;
+    padding: 0 4px;
+    color: #005931; /* Verde UdeA */
+    font-size: 14px;
+}
+
+/* Etiquetas */
+QLabel#titleLabel, QLabel[objectName~=&quot;title&quot;] {
+    font-size: 18px;
+    font-weight: 700;
+    color: #005931; /* Títulos en verde institucional */
+}
+
+/* Botones Principales */
+QPushButton {
+    background-color: #005931; /* Verde Institucional UdeA */
+    color: white;
+    border: 1px solid #004526;
+    border-radius: 4px;
+    padding: 6px 16px;
+    min-height: 30px;
+    font-weight: 600;
+}
+QPushButton:hover {
+    background-color: #2D7A4D; /* Verde un poco más claro para hover */
+    border: 1px solid #005931;
+}
+QPushButton:pressed {
+    background-color: #003D22; /* Verde muy oscuro al presionar */
+}
+QPushButton:disabled {
+    background-color: #E0E0E0;
+    color: #9E9E9E;
+    border: 1px solid #BDBDBD;
+}
+
+/* Botones Secundarios o Planos */
+QPushButton[flat=&quot;true&quot;] {
+    background: transparent;
+    color: #005931;
+    border: none;
+}
+QPushButton[flat=&quot;true&quot;]:hover {
+    text-decoration: underline;
+}
+
+/* Entradas de Texto (Inputs) */
+QLineEdit, QComboBox, QSpinBox, QDoubleSpinBox {
+    background: #FFFFFF;
+    border: 1px solid #CED4DA;
+    border-radius: 4px;
+    padding: 5px;
+    selection-background-color: #2D7A4D; /* Selección verde */
+    selection-color: white;
+}
+QLineEdit:focus, QComboBox:focus {
+    border: 2px solid #005931; /* Foco en verde UdeA */
+}
+
+/* Tablas de Datos */
+QTableWidget, QTableView {
+    background-color: #FFFFFF;
+    gridline-color: #E0E0E0;
+    selection-background-color: #E8F5E9; /* Fondo verde muy pálido para fila seleccionada */
+    selection-color: #000000; /* Texto negro en selección para contraste */
+    border: 1px solid #D1D5DB;
+}
+QHeaderView::section {
+    background-color: #005931; /* Cabecera de tabla en verde */
+    color: white;
+    padding: 6px;
+    border: none;
+    font-weight: bold;
+}
+
+/* Sliders */
+QSlider::groove:horizontal {
+    border: 1px solid #bbb;
+    background: white;
+    height: 8px;
+    border-radius: 4px;
+}
+QSlider::sub-page:horizontal {
+    background: #005931; /* Relleno del slider en verde */
+    border-radius: 4px;
+}
+QSlider::handle:horizontal {
+    background: #FFFFFF;
+    border: 1px solid #005931;
+    width: 16px;
+    height: 16px;
+    margin: -5px 0;
+    border-radius: 8px;
+}
+
+/* Scrollbars Minimalistas */
+QScrollBar:vertical {
+    width: 10px;
+    background: transparent;
+}
+QScrollBar::handle:vertical {
+    background: #CFD8DC;
+    border-radius: 5px;
+}
+QScrollBar::handle:vertical:hover {
+    background: #B0BEC5;
+}
+
+/* Mensajes de Estado */
+QLabel[style~=&quot;status-error&quot;] { color: #D32F2F; font-weight: bold; } /* Rojo estándar para errores */
+QLabel[style~=&quot;status-warning&quot;] { color: #F57F17; font-weight: bold; }
+</string>
   </property>
   <widget class="QWidget" name="centralwidget">
+   <property name="toolTip">
+    <string>Estilo aplicado: Paleta Institucional UdeA.</string>
+   </property>
    <property name="autoFillBackground">
-    <bool>true</bool>
+    <bool>false</bool>
    </property>
    <property name="styleSheet">
     <string notr="true"/>
@@ -135,7 +274,7 @@
          <bool>true</bool>
         </property>
         <property name="currentIndex">
-         <number>1</number>
+         <number>3</number>
         </property>
         <widget class="QWidget" name="page_home">
          <property name="minimumSize">
@@ -416,10 +555,8 @@
                 </property>
                 <property name="font">
                  <font>
-                  <family>Sitka Small Semibold</family>
-                  <weight>75</weight>
-                  <italic>true</italic>
-                  <bold>true</bold>
+                  <family>Inter,Roboto,Segoe UI,sans-serif</family>
+                  <pointsize>-1</pointsize>
                  </font>
                 </property>
                 <property name="text">
@@ -440,10 +577,8 @@
                 </property>
                 <property name="font">
                  <font>
-                  <family>Sitka Small Semibold</family>
-                  <weight>75</weight>
-                  <italic>true</italic>
-                  <bold>true</bold>
+                  <family>Inter,Roboto,Segoe UI,sans-serif</family>
+                  <pointsize>-1</pointsize>
                  </font>
                 </property>
                 <property name="text">
@@ -464,10 +599,8 @@
                 </property>
                 <property name="font">
                  <font>
-                  <family>Sitka Small Semibold</family>
-                  <weight>75</weight>
-                  <italic>true</italic>
-                  <bold>true</bold>
+                  <family>Inter,Roboto,Segoe UI,sans-serif</family>
+                  <pointsize>-1</pointsize>
                  </font>
                 </property>
                 <property name="text">
@@ -657,9 +790,6 @@
                 </property>
                </widget>
               </item>
-              <item>
-               <widget class="QComboBox" name="cb_columnas"/>
-              </item>
              </layout>
             </item>
             <item row="0" column="1">
@@ -676,7 +806,7 @@
              </spacer>
             </item>
             <item row="1" column="1" rowspan="2">
-             <widget class="QTableWidget" name="tabla_datos">
+             <widget class="QTableWidget" name="table_datos">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                 <horstretch>0</horstretch>
@@ -688,6 +818,9 @@
                 <width>100</width>
                 <height>50</height>
                </size>
+              </property>
+              <property name="alternatingRowColors">
+               <bool>true</bool>
               </property>
              </widget>
             </item>
@@ -861,7 +994,8 @@
                <enum>QFrame::Raised</enum>
               </property>
               <property name="text">
-               <string>Bienvenido! Por favor, ingresa tus credenciales para iniciar sesion</string>
+               <string>Bienvenido!
+Por favor, ingresa tus credenciales para iniciar sesion</string>
               </property>
              </widget>
             </item>
@@ -896,8 +1030,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>606</width>
-     <height>18</height>
+     <width>750</width>
+     <height>24</height>
     </rect>
    </property>
   </widget>
