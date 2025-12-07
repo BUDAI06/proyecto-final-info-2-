@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QMainWindow, QPushButton, QWidget, QStackedWidget
+from PyQt5.QtWidgets import QMainWindow, QPushButton, QWidget, QStackedWidget, QComboBox
 from PyQt5.uic import loadUi
 from view.imagenes_view import ImagenesView
 from view.senales_view import SenalesView
@@ -68,20 +68,15 @@ class MainAppView(QMainWindow):
         self.btn_ir_perfil = self.findChild(QPushButton, "btn_ir_perfil")
         self.btn_ir_logout = self.findChild(QPushButton, "btn_ir_logout")
 
-        # --- 3. REFERENCIAS AL STACKED WIDGET Y SUS PÁGINAS ---
+        # --- 5. REFERENCIAS AL STACKED WIDGET Y SUS PÁGINAS ---
         self.stacked = self.findChild(QStackedWidget, "stacked_contenido")
         
-        # Estas referencias sirven para decirle al StackedWidget qué página mostrar
         self.page_home = self.findChild(QWidget, "page_home")
         self.page_imagenes = self.findChild(QWidget, "page_imagenes")
         self.page_senales = self.findChild(QWidget, "page_senales")
         self.page_tabular = self.findChild(QWidget, "tabular")
         self.page_perfil = self.findChild(QWidget, "perfil")
 
-        self.vista_imagenes = ImagenesView(self)
-        self.vista_senales = SenalesView(self) 
-        self.vista_tabular = TabularView(self)
-        
     # --- MÉTODOS DE NAVEGACIÓN ---
 
     def mostrar_home(self):

@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QWidget, QPushButton, QLabel, QSlider
+from PyQt5.QtWidgets import QWidget, QPushButton, QLabel, QSlider, QStackedWidget
 from PyQt5.QtCore import Qt
 import numpy as np
 from PyQt5.QtGui import QImage, QPixmap
