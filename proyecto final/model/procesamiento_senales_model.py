@@ -3,112 +3,132 @@ import matplotlib.pyplot as plt
 from scipy.io import loadmat
 from scipy.signal import savgol_filter, butter, lfilter
 from io import BytesIO
-import os 
-import scipy.signal as signal 
-# from .archivo_mat import ArchivoMAT  # <--- Descomentar si usas la clase ArchivoMAT para otras tareas
+import scipy.signal as signal
+
 
 class ProcesadorSenalesModelo:
-    
-    FS = 1000  # Frecuencia de muestreo por defecto
-    
+
+    FS = 1000  # Frecuencia de muestreo
+
     def __init__(self):
-        """Inicializa las variables del modelo."""
         self.data = None
         self.senal = None
         self.llaves = []
         self.ruta = ""
 
-    # ----------------------------------------------------------------------
-    #                     MÉTODOS DE CARGA Y GESTIÓN
-    # ----------------------------------------------------------------------
+    # ============================================================
+    #         MÉTODOS DE CARGA
+    # ============================================================
 
     def cargar_archivo(self, ruta_completa):
-        """Carga el archivo MAT."""
+        """Carga archivo MAT y obtiene sus llaves."""
         self.data = None
         self.senal = None
         self.llaves = []
-        
+
         try:
             self.data = loadmat(ruta_completa, mat_dtype=True)
             self.llaves = [k for k in self.data.keys() if not k.startswith('__')]
             self.ruta = ruta_completa
             return self.llaves if self.llaves else None
+
         except Exception as e:
-            print(f"Error al intentar leer el archivo MAT: {e}") 
+            print(f"Error al leer archivo MAT: {e}")
             return None
 
     def seleccionar_llave(self, llave_elegida):
-        """Selecciona la señal y normaliza su forma a (Canales x Muestras)."""
-        if self.data is None or llave_elegida not in self.llaves: return False
-            
+        """Normaliza la señal a forma (Canales x Muestras)."""
+        if self.data is None or llave_elegida not in self.llaves:
+            return False
+
         senal = self.data[llave_elegida]
-        
-        # Lógica de Normalización de Forma (Mantenida)
+
+        # Normalizaciones
         if senal.ndim == 3:
             c, m, e = senal.shape
             senal = senal.reshape(c, m * e)
-        if senal.ndim == 1: senal = senal.reshape(1, -1)
+
+        if senal.ndim == 1:
+            senal = senal.reshape(1, -1)
+
         if senal.ndim == 2 and senal.shape[0] > senal.shape[1] and senal.shape[1] < 100:
             senal = senal.T
-            
-        self.senal = senal
+
+        self.senal = senal.astype(float)
+
         return True
-        
+
     def obtener_canal(self, i):
-        """Retorna los datos de un canal específico."""
-        if self.senal is None: return None
-        try: return self.senal[i, :].astype(float)
-        except IndexError: return None
-        
+        if self.senal is None:
+            return None
+        try:
+            return self.senal[i, :].astype(float)
+        except IndexError:
+            return None
+
     def info_senal(self):
-        """Genera una cadena de texto con información básica de la señal."""
-        if self.senal is None or self.senal.shape[1] == 0: return "No hay señal cargada."
+        if self.senal is None or self.senal.shape[1] == 0:
+            return "No hay señal cargada."
         n_muestras = self.senal.shape[1]
         n_canales = self.senal.shape[0]
         dur = n_muestras / self.FS
-        return (f"Canales: {n_canales}\nMuestras: {n_muestras}\n"
-                f"Duración: {dur:.2f} s\nF. Muestreo: {self.FS} Hz")
+        return (
+            f"Canales: {n_canales}\n"
+            f"Muestras: {n_muestras}\n"
+            f"Duración: {dur:.2f} s\n"
+            f"F. Muestreo: {self.FS} Hz"
+        )
 
-    # ----------------------------------------------------------------------
-    #                     MÉTODOS DE PROCESAMIENTO
-    # ----------------------------------------------------------------------
+    # ============================================================
+    #       UTILIDAD: REDUCCIÓN DE PUNTOS PARA EVITAR BLOQUES
+    # ============================================================
+
+    def _reducir_muestras(self, y, max_points=6000):
+        """Reduce la cantidad de puntos para evitar gráficos saturados o rellenos."""
+        n = len(y)
+        if n <= max_points:
+            return y
+
+        factor = max(1, n // max_points)
+        return y[::factor]
+
+    # ============================================================
+    #                       FILTRO
+    # ============================================================
 
     def filtrar(self, y, fmin, fmax, orden=5):
-        """Aplica un filtro Butterworth Pasa Banda."""
-        if y is None or len(y) == 0: return None
-        nyq = 0.5 * self.FS; low = fmin / nyq; high = fmax / nyq
-        
-        if low <= 0 or high >= 1 or low >= high: return None
-             
+        if y is None or len(y) == 0:
+            return None
+
+        nyq = 0.5 * self.FS
+        low = fmin / nyq
+        high = fmax / nyq
+
+        if low <= 0 or high >= 1 or low >= high:
+            return None
+
         b, a = butter(orden, [low, high], btype='band')
         return lfilter(b, a, y)
 
-
-    # ----------------------------------------------------------------------
-    #               MÉTODOS DE GRÁFICOS (APLICANDO ESTILO SOLICITADO)
-    # ----------------------------------------------------------------------
+    # ============================================================
+    #              FUNCIÓN BASE PARA GENERAR IMAGENES
+    # ============================================================
 
     def _generar_grafico_simple_bytes(self, plotting_func, titulo, xlabel, ylabel):
-        """
-        Función auxiliar para gráficos de un solo panel, aplicando el estilo solicitado
-        (Rejilla punteada gris, sin bordes superiores/derechos, color de línea, etc.).
-        """
-        plt.figure(figsize=(6, 3)) 
-        
-        plotting_func() # Ejecuta la función de ploteo específica
-        
-        # --- Aplicación de Estilos de la Imagen (Consistente) ---
+
+        plt.figure(figsize=(6, 3))
+
+        plotting_func()
+
         plt.title(titulo, fontsize=12, fontweight='bold')
         plt.xlabel(xlabel)
         plt.ylabel(ylabel)
-        
-        # Cuadrícula: Punteada, color gris claro
-        plt.grid(True, linestyle='--', color='lightgray', alpha=0.8) 
-        
-        # Eliminar los bordes del gráfico superior y derecho
-        plt.gca().spines['top'].set_visible(False)
-        plt.gca().spines['right'].set_visible(False)
-        
+
+        plt.grid(True, linestyle='--', color='lightgray', alpha=0.8)
+        ax = plt.gca()
+        ax.spines['top'].set_visible(False)
+        ax.spines['right'].set_visible(False)
+
         plt.tight_layout()
 
         buf = BytesIO()
@@ -116,113 +136,122 @@ class ProcesadorSenalesModelo:
         plt.close()
         buf.seek(0)
         return buf.read()
-        
-    # --- GRÁFICO 1: SEÑAL EN DOMINIO DEL TIEMPO (Estilo solicitado) ---
 
-    def plot_senal(self, y, titulo="Señal en Dominio del Tiempo"):
-        """
-        Retorna la gráfica de tiempo en bytes PNG con el estilo solicitado.
-        """
-        if y is None: return None
-        t = np.arange(len(y)) / self.FS 
-        
-        # Color azul vibrante ('#1E90FF') y linewidth 1.5 para el estilo solicitado
-        return self._generar_grafico_simple_bytes(
-            lambda: plt.plot(t, y, linewidth=1.5, color='#1E90FF'), 
-            titulo=titulo, 
-            xlabel="Tiempo (s)", 
-            ylabel="Amplitud (µV)"
-        )
+    # ============================================================
+    #                       GRÁFICOS
+    # ============================================================
 
-    # --- GRÁFICO 2: FFT (Usa el mismo estilo de rejilla y bordes) ---
-
-    def plot_fft(self, y):
-        """Retorna la gráfica FFT en bytes PNG."""
-        if y is None or len(y) == 0: return None
-        Y = np.fft.rfft(y); f = np.fft.rfftfreq(len(y), 1/self.FS)
-        
-        return self._generar_grafico_simple_bytes(
-            lambda: plt.plot(f, np.abs(Y), linewidth=1, color='orange'), 
-            titulo="Espectro de Frecuencia (FFT)", 
-            xlabel="Frecuencia (Hz)", 
-            ylabel="Amplitud"
-        )
-        
-    # --- GRÁFICO 3: SEGMENTO (Puede usar el estilo limpio 'ECG' si lo prefieres, o el simple) ---
-
-    def plot_segmento(self, canal, inicio_s, fin_s):
-        """Retorna el gráfico de un segmento específico."""
-        if self.senal is None: return None
-        
-        senal = self.senal
-        num_muestras = senal.shape[1]
-        inicio = int(inicio_s * self.FS); fin = int(fin_s * self.FS)
-
-        if inicio < 0 or fin > num_muestras or inicio >= fin or canal < 0 or canal >= senal.shape[0]:
+    def plot_senal(self, y, titulo="Señal en el Tiempo"):
+        if y is None:
             return None
 
-        segmento_canal = senal[canal, inicio:fin]
-        tiempo_segmento = np.arange(inicio, fin) / self.FS
-        
-        segmento_suave = segmento_canal
-        if len(segmento_canal) > 51:
-             try: segmento_suave = savgol_filter(segmento_canal, 51, 3)
-             except: pass
-
-        titulo = f"Segmento del Canal {canal + 1}: {inicio_s:.3f}s – {fin_s:.3f}s"
+        # ↓↓↓↓   Nueva mejora: evitar bloque negro   ↓↓↓↓
+        y_red = self._reducir_muestras(y)
+        t = np.arange(len(y_red)) / self.FS
 
         return self._generar_grafico_simple_bytes(
-            lambda: plt.plot(tiempo_segmento, segmento_suave, color='forestgreen', linewidth=1.2),
-            titulo=titulo, 
-            xlabel="Tiempo (s)", 
+            lambda: plt.plot(t, y_red, linewidth=0.7, color='gray'),
+            titulo=titulo,
+            xlabel="Tiempo (s)",
             ylabel="Amplitud (µV)"
         )
 
-    # --- GRÁFICO 4: COMPARATIVO DE CONTAMINACIÓN (Requiere manejo multi-panel manual) ---
-    
+    def plot_fft(self, y):
+        if y is None or len(y) == 0:
+            return None
+
+        y_red = self._reducir_muestras(y)
+
+        Y = np.fft.rfft(y_red)
+        f = np.fft.rfftfreq(len(y_red), 1 / self.FS)
+
+        return self._generar_grafico_simple_bytes(
+            lambda: plt.plot(f, np.abs(Y), linewidth=0.9, color='orange'),
+            titulo="Espectro de Frecuencia (FFT)",
+            xlabel="Frecuencia (Hz)",
+            ylabel="Amplitud"
+        )
+
+    def plot_segmento(self, canal, inicio_s, fin_s):
+        if self.senal is None:
+            return None
+
+        num_muestras = self.senal.shape[1]
+        inicio = int(inicio_s * self.FS)
+        fin = int(fin_s * self.FS)
+
+        if inicio < 0 or fin > num_muestras or inicio >= fin:
+            return None
+
+        segmento = self.senal[canal, inicio:fin]
+        segmento = self._reducir_muestras(segmento)
+        tiempo = np.arange(len(segmento)) / self.FS
+
+        if len(segmento) > 51:
+            try:
+                segmento = savgol_filter(segmento, 51, 3)
+            except:
+                pass
+
+        titulo = f"Segmento del Canal {canal+1}: {inicio_s:.3f}s – {fin_s:.3f}s"
+
+        return self._generar_grafico_simple_bytes(
+            lambda: plt.plot(tiempo, segmento, color='forestgreen', linewidth=0.8),
+            titulo=titulo,
+            xlabel="Tiempo (s)",
+            ylabel="Amplitud (µV)"
+        )
+
     def plot_contaminacion_comparativa(self, canal_idx, xmin_s, xmax_s, intensity=0.3):
-        """
-        Retorna el gráfico de contaminación COMPARATIVO (doble panel) como bytes PNG.
-        """
-        if self.senal is None: return None
+        if self.senal is None:
+            return None
+
         num_canales, num_muestras = self.senal.shape
-        xmin = int(round(xmin_s * self.FS)); xmax = int(round(xmax_s * self.FS))
-        xmin = max(0, xmin); xmax = min(num_muestras, xmax)
-        if canal_idx < 0 or canal_idx >= num_canales or xmin >= xmax: return None
-        
-        # --- Cálculo de la Contaminación ---
+        xmin = int(xmin_s * self.FS)
+        xmax = int(xmax_s * self.FS)
+
+        if canal_idx < 0 or canal_idx >= num_canales or xmin >= xmax:
+            return None
+
         tiempo = np.arange(num_muestras) / self.FS
-        canal_original = self.senal[canal_idx, :].astype(float)
+        canal_original = self.senal[canal_idx].copy()
+
+        # Normalización
         amp_factor = 100 / np.max(np.abs(canal_original)) if np.max(np.abs(canal_original)) != 0 else 1
         canal_original *= amp_factor
+
         base_std = np.std(canal_original) if np.std(canal_original) > 0 else 1.0
+
         ruido = np.random.normal(0, base_std * intensity, xmax - xmin)
         canal_contaminado = canal_original.copy()
         canal_contaminado[xmin:xmax] += ruido
-        canal_original_suave = np.convolve(canal_original, np.ones(10)/10, mode='same')
-        canal_contaminado_suave = np.convolve(canal_contaminado, np.ones(10)/10, mode='same')
-        
-        # --- Generación de Gráfico Multi-Panel (Específico) ---
+
+        # Suavizar
+        suav = lambda x: np.convolve(x, np.ones(10) / 10, mode='same')
+        canal_original_suave = suav(self._reducir_muestras(canal_original))
+        canal_contaminado_suave = suav(self._reducir_muestras(canal_contaminado))
+        tiempo_red = np.linspace(0, tiempo[-1], len(canal_original_suave))
+
         fig, axes = plt.subplots(1, 2, figsize=(12, 4), sharey=True)
-        fig.suptitle(f"Contaminación del Canal {canal_idx + 1}", fontsize=13, fontweight='bold')
+        fig.suptitle(f"Contaminación del Canal {canal_idx + 1}", fontsize=13, fontweight="bold")
 
-        # Plot 1: Original
-        axes[0].plot(tiempo, canal_original_suave, color='blue', linewidth=1)
+        axes[0].plot(tiempo_red, canal_original_suave, color='blue', linewidth=0.8)
         axes[0].set_title("Original")
-        axes[0].set_ylabel("Amplitud (µV)")
 
-        # Plot 2: Contaminado
-        axes[1].plot(tiempo, canal_contaminado_suave, color='red', linewidth=1)
-        axes[1].axvspan(xmin_s, xmax_s, color='salmon', alpha=0.25, label='Ruido')
-        axes[1].set_title(f"Contaminado ({xmin_s:.0f}-{xmax_s:.0f} s)")
+        axes[1].plot(tiempo_red, canal_contaminado_suave, color='red', linewidth=0.8)
+        axes[1].axvspan(xmin_s, xmax_s, color='salmon', alpha=0.25)
+        axes[1].set_title(f"Contaminado ({xmin_s}-{xmax_s} s)")
 
-        # Estilos Comunes (Aplicando el estilo solicitado: rejilla punteada, sin bordes)
         for ax in axes:
             ax.set_xlabel("Tiempo (s)")
-            ax.grid(True, linestyle='--', color='lightgray', alpha=0.8) 
-            ax.spines['top'].set_visible(False); ax.spines['right'].set_visible(False)
-            
+            ax.grid(True, linestyle='--', color='lightgray', alpha=0.8)
+            ax.spines['top'].set_visible(False)
+            ax.spines['right'].set_visible(False)
+
         plt.tight_layout(rect=[0, 0, 1, 0.9])
-        
-        buf = BytesIO(); fig.savefig(buf, format="png", dpi=100); plt.close(fig)
-        buf.seek(0); return buf.read()
+
+        buf = BytesIO()
+        fig.savefig(buf, format="png", dpi=100)
+        plt.close(fig)
+        buf.seek(0)
+        return buf.read()
